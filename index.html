@@ -333,14 +333,16 @@ function ladeBaustellenplan() {
         html = "Keine Daten gefunden";
       } else {
         data.daten.forEach(e => {
-          html += `
-            <div style="padding:10px; margin-bottom:10px; background:#f4f6f8; border-radius:8px;">
-              <b>${e.datum}</b><br>
-              ${e.baustelle1 || ""}<br>
-              ${e.baustelle2 || ""}<br>
-              ${e.baustelle3 || ""}
-            </div>
-          `;
+        html += `
+  <div style="padding:10px; margin-bottom:10px; background:#f4f6f8; border-radius:8px;">
+    <b>${e.datum}</b><br><br>
+
+    Baustelle 1: ${e.baustelle1 ? e.baustelle1 : "kein Eintrag"}<br>
+    Baustelle 2: ${e.baustelle2 ? e.baustelle2 : "kein Eintrag"}<br>
+    Baustelle 3: ${e.baustelle3 ? e.baustelle3 : "kein Eintrag"}
+  </div>
+`;
+
         });
       }
 
@@ -368,7 +370,4 @@ document.getElementById("kw").value = getKW();
 
 </body>
 </html>
-
-
-
 
