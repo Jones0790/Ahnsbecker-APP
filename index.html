@@ -132,8 +132,8 @@
 
   <img src="icon.png" alt="Ahnsbecker Logo" class="logo">
 
-  <h1>Ahnsbecker Urlaubs- & Krankmelder 3.0</h1>
-  <div class="subtitle">Schneller Urlaubsantrag und Krankmeldung per Handy</div>
+  <h1>Ahnsbecker APP 3.0</h1>
+  <div class="subtitle">Super Service International</div>
 
 <div class="info-box">
   <b>ℹ️ Bitte beachten</b><br><br>
@@ -200,6 +200,19 @@
     </div>
 
   </form>
+<hr>
+
+<h2>📋 Baustellenplan</h2>
+
+<label>Mitarbeiter</label>
+<select id="mitarbeiterPlan"></select>
+
+<label>Kalenderwoche</label>
+<input type="number" id="kw" min="1" max="53">
+
+<button type="button" onclick="ladeBaustellenplan()">Anzeigen</button>
+
+<div id="baustellenOutput" style="margin-top:15px;"></div>
 
 </div>
 
@@ -233,15 +246,18 @@ const mitarbeiterListe = [
 ];
 
 function ladeMitarbeiter() {
-  const select = document.getElementById("mitarbeiter");
+  const select1 = document.getElementById("mitarbeiter");
+  const select2 = document.getElementById("mitarbeiterPlan");
 
-  mitarbeiterListe.forEach(name => {
-    const option = document.createElement("option");
-    option.value = name;
-    option.textContent = name;
-    select.appendChild(option);
+  select1.innerHTML = '<option value="">Bitte auswählen</option>';
+  select2.innerHTML = '<option value="">Bitte auswählen</option>';
+
+  mitarbeiterListe.forEach(m => {
+    select1.add(new Option(m, m));
+    select2.add(new Option(m, m));
   });
 }
+
 
 function setToday() {
   const today = new Date().toISOString().split("T")[0];
@@ -260,7 +276,7 @@ function toggleEAU() {
 
 /* GOOGLE SCRIPT */
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxR3PPDUxQ5PteOaA46MGpG-WchAQDUELQFNJ4NShyxQzjwZxsTkZ-kSH1KQFXrPCLdcQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypmBxr2Bt2Ua-nuQszF0HeH4TYTRyAoNMxkhp9c_ttMzRFYDfICVZwhjzWoWHhleTL7g/exec";
 
 
 /* SENDEN */
@@ -293,16 +309,66 @@ document.getElementById("form").addEventListener("submit", function(e) {
   });
 
 });
+function ladeBaustellenplan() {
+  const m = document.getElementById("mitarbeiterPlan").value;
+  const kw = document.getElementById("kw").value;
 
+  if (!m) {
+    alert("Bitte Mitarbeiter wählen");
+    return;
+  }
+
+  if (!kw) {
+  alert("Bitte Kalenderwoche eingeben");
+  return;
+  }
+
+  fetch(`${SCRIPT_URL}?action=baustellenplan&mitarbeiter=${encodeURIComponent(m)}&kw=${kw}`)
+    .then(r => r.json())
+    .then(data => {
+
+      let html = "";
+
+      if (!data.daten || data.daten.length === 0) {
+        html = "Keine Daten gefunden";
+      } else {
+        data.daten.forEach(e => {
+          html += `
+            <div style="padding:10px; margin-bottom:10px; background:#f4f6f8; border-radius:8px;">
+              <b>${e.datum}</b><br>
+              ${e.baustelle1 || ""}<br>
+              ${e.baustelle2 || ""}<br>
+              ${e.baustelle3 || ""}
+            </div>
+          `;
+        });
+      }
+
+      document.getElementById("baustellenOutput").innerHTML = html;
+    })
+    .catch(() => {
+      document.getElementById("baustellenOutput").innerHTML = "❌ Fehler beim Laden";
+    });
+}
+
+function getKW() {
+  const d = new Date();
+  const onejan = new Date(d.getFullYear(),0,1);
+  return Math.ceil((((d - onejan) / 86400000) + onejan.getDay()+1)/7);
+}
 
 /* START */
 
 ladeMitarbeiter();
 setToday();
 toggleEAU();
+document.getElementById("kw").value = getKW();
 
 </script>
 
 </body>
 </html>
+
+
+
 
