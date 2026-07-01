@@ -153,6 +153,21 @@
       margin-top: 15px;
       text-align: center;
     }
+.aed-button {
+  display: block;
+  text-align: center;
+  background: #e53935;
+  color: white;
+  padding: 12px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.aed-button:hover {
+  background: #c62828;
+}
   </style>
 </head>
 
@@ -168,6 +183,7 @@
 <div class="tabs">
 <button class="tab active" onclick="showTab('formular', this)">📩 Meldung</button>
 <button class="tab" onclick="showTab('baustelle', this)">📋 Baustellenplan</button>
+<button class="tab" onclick="showTab('notfall', this)">🚨 Notfall</button>
 
 </div>
 
@@ -261,6 +277,63 @@
 
 <div id="baustellenOutput" style="margin-top:15px;"></div>
 
+</div>
+
+<div id="notfall" class="tab-content">
+<h2>🚨 Notfall</h2>
+
+<div class="info-box">
+
+<b>Notfall:</b><br><br>
+
+<b>Ersthelfer:</b><br>
+M. Preuß, M. Meyer, D. Austin, R. Knakendöffel, D. Richter, P. Weich, B. Tegtmeier, N. Lillie, C. Santelmann, T. Ritzke, P. Dannhauer, K. Fricke, L. Stellmacher, N. Heins, L. Tostmann, Ch. Hustedt, B. Morth, B. Lennard, B. Borchling
+<br><br>
+
+<b>🚑 WICHTIG:</b><br>
+Bitte ruft bei allen schwerwiegenden Unfällen immer den Krankenwagen!<br><br>
+
+📞 <b>Notruf:</b> <a href="tel:112">112</a><br>
+👮 <b>Polizei:</b> <a href="tel:110">110</a><br>
+🚒 <b>Feuerwehr:</b> <a href="tel:112">112</a><br><br>
+
+<b>Leichte Unfälle:</b><br>
+Nur bei unkritischen Unfällen (z.B. Bänderdehnung oder sehr kleinen Schnittverletzungen) direkt zum Durchgangsarzt fahren.
+<br><br>
+
+<b>Durchgangsärzte Raum Celle:</b><br>
+Dr. med. Stefan Marks<br>
+Neumarkt 1D, 29221 Celle<br>
+📞 <a href="tel:+495141909096">05141 - 90 90 96</a><br><br>
+
+Dr. med. Philipp Haas<br>
+Alter Bremer Weg 14, Celle<br>
+📞 <a href="tel:+49514133377">05141 - 333 77</a><br><br>
+
+<b>Durchgangsärzte Raum Hannover:</b><br>
+Dr. med. Karsten Glockemann<br>
+Gretchenstr. 29, Hannover<br>
+📞 <a href="tel:+49511318646">0511 - 31 86 46</a><br><br>
+
+Dr. med. Hermann Knigge<br>
+Limmerstraße 15, Hannover<br>
+📞 <a href="tel:+49511454540">0511 - 45 45 40</a>
+
+<br>
+
+<b>🫀 Defibrillator (AED) finden:</b><br>
+Im Notfall kann ein Defibrillator Leben retten.<br>
+Hier findet ihr den nächsten Standort:<br><br>
+
+<a href="https://www.steiger-stiftung.de/was-wir-tun/herzsicher/standorte-aed/" 
+   target="_blank" 
+   rel="noopener noreferrer"
+   class="aed-button">
+🔍 AED-Standorte anzeigen
+</a>
+
+
+</div>
 </div>
 
 <script>
