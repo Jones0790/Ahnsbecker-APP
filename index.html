@@ -12,6 +12,36 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 
   <style>
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  background: #e0e0e0;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.tab.active {
+  background: #2b7cff;
+  color: white;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
     body {
       font-family: Arial, sans-serif;
       background: #f4f6f8;
@@ -135,6 +165,14 @@
   <h1>Ahnsbecker APP 3.0</h1>
   <div class="subtitle">Super Service International</div>
 
+<div class="tabs">
+<button class="tab active" onclick="showTab('formular', this)">📩 Meldung</button>
+<button class="tab" onclick="showTab('baustelle', this)">📋 Baustellenplan</button>
+
+</div>
+
+<div id="formular" class="tab-content active">
+
 <h2>📩 Urlaubsantrag & Krankmeldung</h2>
 
 <div class="info-box">
@@ -202,9 +240,11 @@
     </div>
 
   </form>
-<hr>
+</div>
 
+<div id="baustelle" class="tab-content">
 <h2>📋 Baustellenplan</h2>
+
 <div class="info-box">
   <p>
     Bitte gebt eure Kalenderwoche ein, um zu sehen, auf welchen Baustellen ihr eingeplant seid.
@@ -224,6 +264,7 @@
 </div>
 
 <script>
+
 
 /* EMPFÄNGER */
 
@@ -373,8 +414,19 @@ setToday();
 toggleEAU();
 document.getElementById("kw").value = getKW();
 
+function showTab(tabId, el) {
+  document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+
+  document.getElementById(tabId).classList.add("active");
+  el.classList.add("active");
+}
+
+
 </script>
 
 </body>
 </html>
+
+
 
