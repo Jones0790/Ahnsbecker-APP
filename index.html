@@ -14,20 +14,25 @@
   <style>
 
 .tabs {
-  display: flex;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 10px;
+  margin-bottom: 20px;
 }
 
 .tab {
-  flex: 1;
-  padding: 10px;
+  padding: 12px;
   border: none;
   border-radius: 8px;
   background: #e0e0e0;
   cursor: pointer;
   font-weight: bold;
+  height: 50px;           /* NEU */
+  display: flex;          /* NEU */
+  align-items: center;    /* NEU */
+  justify-content: center;/* NEU */
 }
+
 
 .tab.active {
   background: #2b7cff;
@@ -184,6 +189,7 @@
 <button class="tab active" onclick="showTab('formular', this)">📩 Meldung</button>
 <button class="tab" onclick="showTab('baustelle', this)">📋 Baustellenplan</button>
 <button class="tab" onclick="showTab('notfall', this)">🚨 Notfall</button>
+<button class="tab" onclick="showTab('info', this)">ℹ️ Info</button>
 
 </div>
 
@@ -335,6 +341,50 @@ Hier findet ihr den nächsten Standort:<br><br>
 
 </div>
 </div>
+
+<div id="info" class="tab-content">
+<h2>ℹ️ Info</h2>
+
+<div class="info-box">
+
+<b>📞 Telefonnummern Büro:</b><br><br>
+
+<b>Steffi Festnetz:</b><br>
+📞 <a href="tel:+4951369724346">05136 - 9724 346</a><br><br>
+
+<b>Steffi Handy:</b><br>
+📞 <a href="tel:+491601633487">0160 - 1633 487</a><br><br>
+
+<b>Dennis Festnetz:</b><br>
+📞 <a href="tel:+4951369726105">05136 - 9726 105</a><br><br>
+
+<b>Imke Festnetz:</b><br>
+📞 <a href="tel:+4951369726104">05136 - 9726 104</a><br><br>
+
+<b>Imke Handy:</b><br>
+📞 <a href="tel:+491774659669">0177 - 46 59 669</a><br><br>
+
+<b>Björn Festnetz:</b><br>
+📞 <a href="tel:+4951369726103">05136 - 9726 103</a><br><br>
+
+<b>Björn Handy:</b><br>
+📞 <a href="tel:+491739107364">0173 - 910 73 64</a><br><br>
+
+<b>Marco Preuß Handy:</b><br>
+📞 <a href="tel:+491739107164">0173 - 910 71 64</a><br><br>
+
+<b>Timm Festnetz:</b><br>
+📞 <a href="tel:+4951369726106">05136 - 9726 106</a><br><br>
+
+<b>Meyer Festnetz:</b><br>
+📞 <a href="tel:+4951419096814">05141 - 909 68 14</a><br><br>
+
+<b>Björn M. Festnetz:</b><br>
+📞 <a href="tel:+4951419096815">05141 - 909 68 15</a>
+
+</div>
+</div>
+
 
 <script>
 
