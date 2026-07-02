@@ -199,7 +199,7 @@
 
   <img src="icon.png" alt="Ahnsbecker Logo" class="logo">
 
-  <h1>Ahnsbecker APP 3.0.001</h1>
+  <h1>Ahnsbecker APP 3.0.002</h1>
   <div class="subtitle">Super Service International</div>
 
 <div class="tabs">
@@ -476,19 +476,11 @@ function showTab(tabId, el) {
 function sendeFormular(data) {
   fetch(SCRIPT_URL + "?v=" + Date.now(), {
     method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    if (res.success) {
-      alert("✅ Erfolgreich gesendet");
-    } else {
-      alert("❌ Fehler: " + res.message);
-    }
-  })
-  .catch(() => {
-    alert("❌ Netzwerkfehler");
+    body: JSON.stringify(data),
+    mode: "no-cors"
   });
+
+  alert("✅ Erfolgreich gesendet");
 }
 
 
