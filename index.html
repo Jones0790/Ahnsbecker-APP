@@ -199,7 +199,7 @@
 
   <img src="icon.png" alt="Ahnsbecker Logo" class="logo">
 
-  <h1>Ahnsbecker APP 3.0.002</h1>
+  <h1>Ahnsbecker APP 3.0.003</h1>
   <div class="subtitle">Super Service International</div>
 
 <div class="tabs">
@@ -522,6 +522,21 @@ function ladeBaustellenplan() {
     });
 }
 
+function getISOWeek(date) {
+  const tmp = new Date(date.getTime());
+  tmp.setHours(0, 0, 0, 0);
+  tmp.setDate(tmp.getDate() + 3 - ((tmp.getDay() + 6) % 7));
+
+  const week1 = new Date(tmp.getFullYear(), 0, 4);
+
+  return 1 + Math.round(((tmp - week1) / 86400000 - 3 + ((week1.getDay() + 6) % 7)) / 7);
+}
+
+function setKW() {
+  const kw = getISOWeek(new Date());
+  document.getElementById("kw").value = kw;
+}
+
 
 /* START */
 
@@ -539,6 +554,7 @@ document.addEventListener("DOMContentLoaded", function() {
   ladeMitarbeiter();
   setToday();
   toggleEAU();
+  setKW(); // 
 
   document.getElementById("form").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -565,7 +581,7 @@ document.addEventListener("DOMContentLoaded", function() {
     toggleEAU();
   });
 
-});
+
 </script>
 
 
