@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Ahnsbecker APP 3.0</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+<meta charset="UTF-8">
+<title>Ahnsbecker APP 3.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2b7cff">
@@ -178,7 +181,21 @@
 
 <body>
 
-<div class="container">
+<div class="container" id="loginBox">
+  <h1>🔐 Ahnsbecker APP</h1>
+  <div class="subtitle">Bitte Passwort eingeben</div>
+
+  <label for="passwort">Passwort</label>
+  <input type="password" id="passwort" placeholder="Passwort">
+
+  <button type="button" onclick="checkPassword()">Einloggen</button>
+
+  <div class="hint">
+    Zugriff nur für Mitarbeiter.
+  </div>
+</div>
+
+<div class="container" id="app" style="display:none;">
 
   <img src="icon.png" alt="Ahnsbecker Logo" class="logo">
 
@@ -385,24 +402,26 @@ Hier findet ihr den nächsten Standort:<br><br>
 </div>
 </div>
 
+</div>
+
 
 <script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyV-OsTe8L_xAFbIZOg1BE5pOyfc8jzjYZgNo4obbWEuk9WcPmT1fr9k18YEnM_krXpMg/exec";
+const APP_TOKEN = "Ahnsbecker-App-2026-Geheim-7391";
+const APP_PASSWORT = "Ahnsbecker";
 
 
-/* EMPFÄNGER */
+function checkPassword() {
+  const eingabe = document.getElementById("passwort").value;
 
-const EMAIL_URLAUB = [
-  "d.austin@ahnsbecker-zimmerei.de"
-];
-
-const EMAIL_OHNE_EAU = [
-  "d.austin@ahnsbecker-zimmerei.de",
-  "dennisaus@yahoo.de"
-];
-
-const EMAIL_MIT_EAU = [
-  "d.austin@ahnsbecker-zimmerei.de"
-];
+  if (eingabe === APP_PASSWORT) {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    sessionStorage.setItem("appLogin", "ok");
+  } else {
+    alert("❌ Falsches Passwort");
+  }
+}
 
 
 /* MITARBEITER */
@@ -440,14 +459,40 @@ function toggleEAU() {
   const eauFelder = document.getElementById("eauFelder");
 
   eauFelder.style.display = typ === "mit" ? "block" : "none";
-
   document.getElementById("arztDatum").required = typ === "mit";
 }
 
+function showTab(tabId, el) {
+  document.querySelectorAll(".tab").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
 
-/* GOOGLE SCRIPT */
+  document.getElementById(tabId).classList.add("active");
+  el.classList.add("active");
+}
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbypmBxr2Bt2Ua-nuQszF0HeH4TYTRyAoNMxkhp9c_ttMzRFYDfICVZwhjzWoWHhleTL7g/exec";
+
+/* ✅ SENDEN */
+
+function sendeFormular(data) {
+  fetch(SCRIPT_URL + "?v=" + Date.now(), {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.success) {
+      alert("✅ Erfolgreich gesendet");
+    } else {
+      alert("❌ Fehler: " + res.message);
+    }
+  })
+  .catch(() => {
+    alert("❌ Netzwerkfehler");
+  });
+}
 
 
 /* BAUSTELLENPLAN */
@@ -456,119 +501,86 @@ function ladeBaustellenplan() {
   const m = document.getElementById("mitarbeiterPlan").value;
   const kw = document.getElementById("kw").value;
 
-  if (!m) {
-    alert("Bitte Mitarbeiter wählen");
+  if (!m || !kw) {
+    alert("Bitte alles ausfüllen");
     return;
   }
 
-  if (!kw) {
-  alert("Bitte Kalenderwoche eingeben");
-  return;
-  }
-
-  fetch(`${SCRIPT_URL}?action=baustellenplan&mitarbeiter=${encodeURIComponent(m)}&kw=${kw}`)
+  fetch(`${SCRIPT_URL}?action=baustellenplan&token=${APP_TOKEN}&mitarbeiter=${encodeURIComponent(m)}&kw=${kw}&v=${Date.now()}`)
     .then(r => r.json())
     .then(data => {
-
       let html = "";
 
-      if (!data.daten || data.daten.length === 0) {
-        html = "Keine Daten gefunden";
+      if (!data.success) {
+        html = data.message;
       } else {
         data.daten.forEach(e => {
-        html += `
-  <div style="padding:10px; margin-bottom:10px; background:#f4f6f8; border-radius:8px;">
-    <b>${e.datum}</b><br><br>
-
-    Baustelle 1: ${e.baustelle1 ? e.baustelle1 : "kein Eintrag"}<br>
-    Baustelle 2: ${e.baustelle2 ? e.baustelle2 : "kein Eintrag"}<br>
-    Baustelle 3: ${e.baustelle3 ? e.baustelle3 : "kein Eintrag"}
-  </div>
-`;
-
+          html += `
+          <div style="padding:10px; margin-bottom:10px; background:#f4f6f8; border-radius:8px;">
+            <b>${e.datum}</b><br><br>
+            Baustelle 1: ${e.baustelle1}<br>
+            Baustelle 2: ${e.baustelle2}<br>
+            Baustelle 3: ${e.baustelle3}
+          </div>`;
         });
       }
 
       document.getElementById("baustellenOutput").innerHTML = html;
     })
     .catch(() => {
-      document.getElementById("baustellenOutput").innerHTML = "❌ Fehler beim Laden";
+      document.getElementById("baustellenOutput").innerHTML = "❌ Fehler";
     });
-}
-
-function getKW() {
-  const d = new Date();
-  d.setHours(0,0,0,0);
-  d.setDate(d.getDate() + 3 - (d.getDay() + 6) % 7);
-  const week1 = new Date(d.getFullYear(),0,4);
-  return 1 + Math.round(((d - week1) / 86400000 - 3 + (week1.getDay() + 6) % 7) / 7);
-}
-
-function showTab(tabId, button) {
-  document.querySelectorAll(".tab-content").forEach(tab => {
-    tab.classList.remove("active");
-  });
-
-  document.querySelectorAll(".tab").forEach(btn => {
-    btn.classList.remove("active");
-  });
-
-  document.getElementById(tabId).classList.add("active");
-  button.classList.add("active");
 }
 
 
 /* START */
 
 document.addEventListener("DOMContentLoaded", function() {
+
+  if (sessionStorage.getItem("appLogin") === "ok") {
+    document.getElementById("loginBox").style.display = "none";
+    document.getElementById("app").style.display = "block";
+  }
+
+  document.getElementById("passwort").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") checkPassword();
+  });
+
   ladeMitarbeiter();
   setToday();
   toggleEAU();
-  document.getElementById("kw").value = getKW();
+
   document.getElementById("form").addEventListener("submit", function(e) {
     e.preventDefault();
 
     const data = {
+      token: APP_TOKEN,
       typ: document.querySelector('input[name="typ"]:checked').value,
       mitarbeiter: document.getElementById("mitarbeiter").value,
       krankAb: document.getElementById("krankAb").value,
       krankBis: document.getElementById("krankBis").value,
-      arztDatum: document.getElementById("arztDatum").value
+      arztDatum: document.getElementById("arztDatum").value,
+      eauDatum: ""
     };
 
     if (!data.mitarbeiter || !data.krankAb) {
-      alert("Bitte alle Pflichtfelder ausfüllen");
+      alert("Bitte Pflichtfelder ausfüllen");
       return;
     }
 
-    fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      body: JSON.stringify(data)
-    })
-    .then(() => {
-      if (data.typ === "urlaub") {
-        alert("✅ Urlaubsantrag gesendet!");
-      } else {
-        alert("✅ Krankmeldung gesendet!");
-      }
+    sendeFormular(data);
 
-      document.getElementById("form").reset();
-      setToday();
-      toggleEAU();
-    })
-    .catch(() => {
-      alert("❌ Fehler beim Senden!");
-    });
-
+    document.getElementById("form").reset();
+    setToday();
+    toggleEAU();
   });
 
 });
-
-
 </script>
 
+
 </body>
+
 </html>
 
 
