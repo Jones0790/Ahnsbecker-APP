@@ -417,7 +417,7 @@ function checkPassword() {
   if (eingabe === APP_PASSWORT) {
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("app").style.display = "block";
-    localStorage.setItem("appLogin", "ok");
+    sessionStorage.setItem("appLogin", "ok");
   } else {
     alert("❌ Falsches Passwort");
   }
@@ -546,7 +546,7 @@ function setKW() {
 
 document.addEventListener("DOMContentLoaded", function() {
 
-  if (localStorage.getItem("appLogin") === "ok") {
+ if (sessionStorage.getItem("appLogin") === "ok") {
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("app").style.display = "block";
   }
