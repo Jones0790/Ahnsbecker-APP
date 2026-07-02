@@ -533,16 +533,20 @@ function getISOWeek(date) {
 }
 
 function setKW() {
+  const kwInput = document.getElementById("kw");
+  if (!kwInput) return; // ✅ verhindert Absturz
+
   const kw = getISOWeek(new Date());
-  document.getElementById("kw").value = kw;
+  kwInput.value = kw;
 }
+
 
 
 /* START */
 
 document.addEventListener("DOMContentLoaded", function() {
 
-  if (localStorage.getItem("appLogin") === "ok")
+  if (localStorage.getItem("appLogin") === "ok") {
     document.getElementById("loginBox").style.display = "none";
     document.getElementById("app").style.display = "block";
   }
